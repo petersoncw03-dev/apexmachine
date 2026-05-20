@@ -383,71 +383,32 @@ export default function Home() {
               </span>
             </div>
           </div>
-
-          {/* Navigation Tabs & Sidebar Toggle */}
-          <div className="flex items-center gap-3">
-            <div className="flex bg-[#12141c] border border-white/10 p-1.5 rounded-xl gap-1">
-              <button
-                onClick={() => setActiveTab('database')}
-                className={`flex items-center gap-2 px-3 md:px-4 py-2 rounded-lg text-[10px] md:text-xs font-black uppercase tracking-wider transition-all duration-200 ${
-                  activeTab === 'database' 
-                    ? 'bg-[#4c76c6] text-white shadow-md' 
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
-                }`}
-              >
-                <Database size={14} />
-                Banco de Dados
-              </button>
-              <button
-                onClick={() => setActiveTab('strategies')}
-                className={`flex items-center gap-2 px-3 md:px-4 py-2 rounded-lg text-[10px] md:text-xs font-black uppercase tracking-wider transition-all duration-200 ${
-                  activeTab === 'strategies' 
-                    ? 'bg-[#4c76c6] text-white shadow-md' 
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
-                }`}
-              >
-                <SlidersHorizontal size={14} />
-                Leitor de Padrões
-              </button>
-              <button
-                onClick={() => setActiveTab('minutes')}
-                className={`flex items-center gap-2 px-3 md:px-4 py-2 rounded-lg text-[10px] md:text-xs font-black uppercase tracking-wider transition-all duration-200 ${
-                  activeTab === 'minutes' 
-                    ? 'bg-[#4c76c6] text-white shadow-md' 
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
-                }`}
-              >
-                <Clock size={14} />
-                Painel de Minutos
-              </button>
-            </div>
-
-            {/* Sleek Terminal Toggle Button inside the header */}
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className={`p-2 rounded-xl border transition-all duration-200 flex items-center justify-center gap-2 h-[42px] px-3.5 ${
-                sidebarOpen 
-                  ? 'bg-indigo-600/20 border-indigo-500/50 text-[#00ffc8] shadow-[0_0_10px_rgba(99,102,241,0.15)]' 
-                  : 'bg-[#12141c] border-white/10 text-gray-400 hover:text-white hover:bg-white/5'
-              }`}
-              title="Terminal Hacker de Comando"
-            >
-              <Terminal size={14} />
-              <span className="hidden md:inline text-[9px] font-black uppercase tracking-widest">Console</span>
-            </button>
-          </div>
         </div>
       </header>
 
       {/* ── WORKSPACE BODY WITH SHIFTING LAYOUT ── */}
       <div className="relative flex min-h-[calc(100vh-64px)] overflow-x-hidden">
         
-        {/* Shifting Main Content Area */}
-        <main className={`flex-1 transition-all duration-300 p-4 md:p-6 flex flex-col gap-6 w-full ${
-          sidebarOpen 
-            ? 'ml-0 lg:ml-[340px] max-w-full lg:max-w-[calc(100%-340px)]' 
-            : 'max-w-7xl mx-auto'
+        {/* Shifting Main Content Area (Translates without squeezing) */}
+        <main className={`flex-1 transition-all duration-300 p-4 md:p-6 flex flex-col gap-6 w-full max-w-7xl mx-auto ${
+          sidebarOpen ? 'translate-x-[340px]' : 'translate-x-0'
         }`}>
+          
+          {/* Floating Sidebar Toggle Button below top bar on the left */}
+          <div className="flex justify-start">
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-[10px] font-black uppercase tracking-widest transition-all duration-200 ${
+                sidebarOpen 
+                  ? 'bg-indigo-600/20 border-indigo-500/50 text-[#00ffc8] shadow-[0_0_10px_rgba(99,102,241,0.15)]' 
+                  : 'bg-[#12141c] border-white/10 text-gray-400 hover:text-white hover:bg-white/5'
+              }`}
+              title="Menu de Navegação & Operações"
+            >
+              <Terminal size={12} />
+              <span>Painel</span>
+            </button>
+          </div>
         
         {/* Animated view container */}
         <AnimatePresence mode="wait">
@@ -1144,6 +1105,44 @@ export default function Home() {
 
         {/* Sidebar Body */}
         <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-5 custom-scrollbar">
+          
+          {/* Menu de Navegação das Páginas */}
+          <div className="flex flex-col gap-1.5 pb-4 border-b border-white/10">
+            <span className="text-gray-500 text-[8px] font-black uppercase tracking-wider mb-1">Navegação Principal</span>
+            <button
+              onClick={() => setActiveTab('database')}
+              className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all duration-200 ${
+                activeTab === 'database' 
+                  ? 'bg-[#4c76c6] text-white shadow-md' 
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Database size={14} />
+              Banco de Dados
+            </button>
+            <button
+              onClick={() => setActiveTab('strategies')}
+              className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all duration-200 ${
+                activeTab === 'strategies' 
+                  ? 'bg-[#4c76c6] text-white shadow-md' 
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <SlidersHorizontal size={14} />
+              Leitor de Padrões
+            </button>
+            <button
+              onClick={() => setActiveTab('minutes')}
+              className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-xs font-black uppercase tracking-wider transition-all duration-200 ${
+                activeTab === 'minutes' 
+                  ? 'bg-[#4c76c6] text-white shadow-md' 
+                  : 'text-gray-400 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Clock size={14} />
+              Painel de Minutos
+            </button>
+          </div>
           
           {/* HUD Status Card */}
           <div className="bg-black/50 p-4 rounded-xl border border-white/5 flex flex-col gap-3 backdrop-blur-sm shadow-[0_0_15px_rgba(0,0,0,0.4)]">
