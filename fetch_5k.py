@@ -5,11 +5,11 @@ import logging
 from sqlalchemy.dialects.postgresql import insert
 import os
 from dotenv import load_dotenv
+load_dotenv()
 
 # Importa as configurações do banco de dados do seu projeto
 from database import AsyncSessionLocal, Result
 
-load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("Fetch5k")
 
