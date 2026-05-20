@@ -11,7 +11,7 @@ from database import AsyncSessionLocal, Result
 
 load_dotenv()
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
-logger = logging.getLogger("Fetch90k")
+logger = logging.getLogger("Fetch5k")
 
 # Lista de espelhos da Blaze para contornar limites da Cloudflare
 MIRRORS = [
@@ -94,13 +94,10 @@ async def fetch_page_with_mirror_rotation(client, page, end_date_str, attempt=1)
         else:
             raise e
 
-async def fetch_90k_history():
+async def fetch_5k_history():
     logger.info("="*60)
-    logger.info("🚀 [HISTORICO] INICIANDO O RESGATE DE 90.000 PEDRAS ANTIGAS...")
+    logger.info("🚀 [HISTORICO] INICIANDO O RESGATE DE 5.000 PEDRAS RECENTES...")
     logger.info("="*60)
-    
-    # IMPORTANTE: Removido o TRUNCATE TABLE para não deletar/substituir o histórico existente, atendendo ao pedido do usuário.
-    logger.info("ℹ️ Buscando histórico de forma limpa (sem apagar as pedras atuais do banco).")
     
     now_iso = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
     
@@ -109,7 +106,7 @@ async def fetch_90k_history():
     }
     
     total_saved = 0
-    pages_to_fetch = 900 # 900 páginas * 100 registros = 90.000 pedras
+    pages_to_fetch = 50 # 50 páginas * 100 registros = 5.000 pedras
     proxy_url = get_proxy_url()
     
     async with httpx.AsyncClient(timeout=15.0, headers=headers, proxy=proxy_url) as client:
@@ -142,15 +139,15 @@ async def fetch_90k_history():
             await save_results_batch(db_records)
             total_saved += len(db_records)
             
-            if page % 25 == 0 or page == pages_to_fetch:
+            if page % 10 == 0 or page == pages_to_fetch:
                 logger.info(f"📊 Página {page}/{pages_to_fetch} salva. Total até agora: {total_saved} pedras.")
             
             # Pequeno delay para não sobrecarregar a Blaze
             await asyncio.sleep(0.15)
             
     logger.info("="*60)
-    logger.info(f"🎉 Resgate concluído! {total_saved} pedras antigas salvas em UTC com sucesso no banco (sem duplicatas).")
+    logger.info(f"🎉 Resgate concluído! {total_saved} pedras salvas em UTC com sucesso no banco (sem duplicatas).")
     logger.info("="*60)
 
 if __name__ == "__main__":
-    asyncio.run(fetch_90k_history())
+    asyncio.run(fetch_5k_history())
