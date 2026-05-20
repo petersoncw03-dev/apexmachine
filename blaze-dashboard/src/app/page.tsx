@@ -71,8 +71,44 @@ function generateCombinations(length: number): string[][] {
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'database' | 'strategies' | 'minutes'>('database');
   const [sidebarOpen, setSidebarOpen] = useState(true); // Default open for a premium hacker console look!
+  const [pushOffset, setPushOffset] = useState(0);
   const [loadingDb, setLoadingDb] = useState(true);
   const [loadingStats, setLoadingStats] = useState(true);
+
+  // Dynamic responsive sidebar push offset calculation (only pushes if it overlaps)
+  useEffect(() => {
+    const handleResize = () => {
+      if (!sidebarOpen) {
+        setPushOffset(0);
+        return;
+      }
+      const windowWidth = window.innerWidth;
+      const contentMaxWidth = 1280; // max-w-7xl content size
+      const sidebarWidth = 340; // sidebar size
+
+      // On mobile / narrow screens, overlay instead of pushing
+      if (windowWidth < 768) {
+        setPushOffset(0);
+        return;
+      }
+
+      // Calculate the left blank margin outside the centered max-w-7xl content container
+      const margin = Math.max(0, (windowWidth - contentMaxWidth) / 2);
+      
+      if (margin >= sidebarWidth) {
+        // Sidebar fits completely within the left margin without touching the content!
+        setPushOffset(0);
+      } else {
+        // Sidebar overlaps content. Push only by the overlap deficit amount!
+        const overlap = sidebarWidth - margin;
+        setPushOffset(overlap);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [sidebarOpen]);
   
   // Data State
   const [dbData, setDbData] = useState<Roll[]>([]);
@@ -389,10 +425,11 @@ export default function Home() {
       {/* ── WORKSPACE BODY WITH SHIFTING LAYOUT ── */}
       <div className="relative flex min-h-[calc(100vh-64px)] overflow-x-hidden">
         
-        {/* Shifting Main Content Area (Translates without squeezing) */}
-        <main className={`flex-1 transition-all duration-300 p-4 md:p-6 flex flex-col gap-6 w-full max-w-7xl mx-auto ${
-          sidebarOpen ? 'translate-x-[340px]' : 'translate-x-0'
-        }`}>
+        {/* Shifting Main Content Area (Translates only if sidebar collides with content) */}
+        <main 
+          style={{ transform: `translateX(${pushOffset}px)` }}
+          className="flex-1 transition-all duration-300 p-4 md:p-6 flex flex-col gap-6 w-full max-w-7xl mx-auto"
+        >
           
           {/* Floating Sidebar Toggle Button below top bar on the left */}
           <div className="flex justify-start">
