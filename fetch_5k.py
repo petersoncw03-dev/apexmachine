@@ -41,7 +41,7 @@ async def save_results_batch(results: list):
 async def fetch_page_with_retry(client, page, end_date_str, attempt=1):
     # Domínio travado na instância brasileira (mesma roleta do WebSocket ao vivo)
     domain = "blaze.bet.br"
-    url = f"https://{domain}/api/singleplayer-originals/originals/roulette_games/recent/history/1?endDate={end_date_str}&page={page}"
+    url = f"https://{domain}/api/singleplayer-originals/originals/roulette_games/recent/history/1?endDate={end_date_str}&page={page}&limit=100"
     
     try:
         response = await client.get(url)
