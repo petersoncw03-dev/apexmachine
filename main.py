@@ -73,7 +73,10 @@ async def save_results_batch(results: list):
                     "id": r["id"],
                     "color": r["color"],
                     "roll": r["roll"],
-                    "timestamp": r["timestamp"].isoformat()
+                    "timestamp": r["timestamp"].isoformat(),
+                    "total_bets": float(r.get("total_bets", 0) or 0),
+                    "total_payout": float(r.get("total_payout", 0) or 0),
+                    "house_profit": float(r.get("house_profit", 0) or 0)
                 })
                 # Evitando SQL Injection garantindo que a string gerada por json.dumps é segura para literal
                 await session.execute(text(f"NOTIFY nova_pedra, '{payload_str}'"))
