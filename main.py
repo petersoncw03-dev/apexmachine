@@ -160,8 +160,8 @@ async def worker_a_websocket():
             
             ssl_context = get_ssl_context()
             
-            # Conexão WS com TLS Spoofing (Tolerância maior de ping para evitar quedas bobas)
-            async with websockets.connect(BLAZE_WS_URL, extra_headers=extra_headers, ssl=ssl_context, ping_interval=60, ping_timeout=60) as ws:
+            # Conexão WS com TLS Spoofing (Ping agressivo para nunca perder pedra em conexões mortas)
+            async with websockets.connect(BLAZE_WS_URL, extra_headers=extra_headers, ssl=ssl_context, ping_interval=15, ping_timeout=10) as ws:
                 logger.info("[Worker A] ✅ Conectado ao WebSocket com TLS Spoofing ativo.")
                 heartbeat_task = asyncio.create_task(send_heartbeat(ws))
                 subscribed = False
